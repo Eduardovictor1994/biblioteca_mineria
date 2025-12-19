@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Subir libro</title>
-</head>
-<body>
-    <h1>Subir libro PDF</h1>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card shadow-sm p-4 mx-auto" style="max-width: 500px;">
+    <h4 class="mb-3">📤 Subir nuevo libro</h4>
 
     <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="libro" accept=".pdf" required>
-        <br><br>
-        <button type="submit">Subir</button>
-    </form>
+        <div class="mb-3">
+            <input type="file" name="libro" class="form-control" accept=".pdf" required>
+        </div>
 
-    <br>
-    <a href="/">Volver</a>
-</body>
-</html>
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                ⬅ Volver
+            </a>
+            <button class="btn btn-primary">
+                Subir PDF
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+

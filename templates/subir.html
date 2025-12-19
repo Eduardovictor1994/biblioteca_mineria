@@ -1,25 +1,23 @@
 {% extends "base.html" %}
-{% block content %}
 
-<h3>📤 Subir libro</h3>
+{% block content %}
+<h2>📤 Subir nuevo libro</h2>
 
 <form method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-        <input type="file" name="libro" class="form-control" required>
-    </div>
+    <label>Archivo PDF</label>
+    <input type="file" name="libro" required>
 
-    <div class="mb-3">
-        <select name="categoria" class="form-select" required>
-            {% for cat in categorias %}
+    <label>Categoría</label>
+    <select name="categoria">
+        {% for cat in categorias %}
             <option value="{{ cat }}">{{ cat }}</option>
-            {% endfor %}
-        </select>
-    </div>
+        {% endfor %}
+    </select>
 
-    <button class="btn btn-success">Subir</button>
+    <button type="submit">Subir</button>
 </form>
-
 {% endblock %}
+
 
 
 

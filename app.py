@@ -3,20 +3,32 @@ import os
 
 app = Flask(__name__)
 
-BASE_UPLOAD = "uploads/libros"
-CATEGORIAS = ["Geologia", "Perforacion", "Voladura"]
+UPLOAD_FOLDER = "uploads/libros"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Crear carpetas
-for cat in CATEGORIAS:
-    os.makedirs(os.path.join(BASE_UPLOAD, cat), exist_ok=True)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Categorías permitidas
+CATEGORIAS = ["Geología", "Perforación", "Voladura"]
 
 @app.route("/")
 def index():
-    biblioteca = {}
-    for cat in CATEGORIAS:
-        ruta = os.path.join(BASE_UPLOAD, cat)
-        biblioteca[cat] = os.listdir(ruta)
-    return render_template("index.html", biblioteca=biblioteca)
+    categoria = request.args.get("categoria")
+    libros = []
+
+    for archivo in os.listdir(UPLOAD_FOLDER):
+        if archivo.endswith(".pdf"):
+            partes = archivo.split("__")
+            cat = partes[0] if len(partes) > 1 else "Sin categoría"
+
+            if not categoria or categoria == cat:
+                libros.append({
+                    "nombre": archivo,
+                    "categoria": cat
+                })
+
+    return render_template("index.html", libros=libros, categorias=CATEGORIAS, categoria_actual=categoria)
+
 
 @app.route("/subir", methods=["GET", "POST"])
 def subir():
@@ -25,20 +37,25 @@ def subir():
         categoria = request.form["categoria"]
 
         if archivo and archivo.filename.endswith(".pdf"):
-            ruta = os.path.join(BASE_UPLOAD, categoria, archivo.filename)
-            archivo.save(ruta)
+            nombre = f"{categoria}__{archivo.filename}"
+            archivo.save(os.path.join(app.config["UPLOAD_FOLDER"], nombre))
             return redirect(url_for("index"))
 
     return render_template("subir.html", categorias=CATEGORIAS)
 
-@app.route("/descargar/<categoria>/<nombre>")
-def descargar(categoria, nombre):
-    return send_from_directory(os.path.join(BASE_UPLOAD, categoria), nombre, as_attachment=True)
 
-@app.route("/eliminar/<categoria>/<nombre>")
-def eliminar(categoria, nombre):
-    os.remove(os.path.join(BASE_UPLOAD, categoria, nombre))
+@app.route("/eliminar/<nombre>")
+def eliminar(nombre):
+    ruta = os.path.join(app.config["UPLOAD_FOLDER"], nombre)
+    if os.path.exists(ruta):
+        os.remove(ruta)
     return redirect(url_for("index"))
+
+
+@app.route("/descargar/<nombre>")
+def descargar(nombre):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], nombre, as_attachment=True)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)

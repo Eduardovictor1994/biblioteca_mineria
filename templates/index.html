@@ -1,23 +1,30 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-{% for categoria, libros in biblioteca.items() %}
-<h3 class="mt-4">🏷️ {{ categoria }}</h3>
-<div class="row">
+<div class="filtros">
+    <a href="/">Todos</a>
+    {% for cat in categorias %}
+        <a href="/?categoria={{ cat }}">{{ cat }}</a>
+    {% endfor %}
+</div>
+
+<div class="grid">
     {% for libro in libros %}
-    <div class="col-md-3">
-        <div class="card shadow-sm mb-3">
-            <div class="card-body">
-                <h6 class="card-title text-truncate">{{ libro }}</h6>
-                <a href="/descargar/{{ categoria }}/{{ libro }}" class="btn btn-primary btn-sm">⬇️ Descargar</a>
-                <a href="/eliminar/{{ categoria }}/{{ libro }}" class="btn btn-danger btn-sm">🗑️</a>
-            </div>
+    <div class="card">
+        <div class="icono">📘</div>
+        <h3>{{ libro.nombre.split('__')[1] }}</h3>
+        <span class="categoria">{{ libro.categoria }}</span>
+
+        <div class="acciones">
+            <a href="/descargar/{{ libro.nombre }}">⬇ Descargar</a>
+            <a href="/eliminar/{{ libro.nombre }}" class="eliminar">🗑 Eliminar</a>
         </div>
     </div>
     {% endfor %}
 </div>
-{% endfor %}
 
 {% endblock %}
+
 
 

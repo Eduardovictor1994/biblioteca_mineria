@@ -16,7 +16,7 @@ def index():
 @app.route("/subir", methods=["GET", "POST"])
 def subir():
     if request.method == "POST":
-        archivo = request.files["libro"]
+        archivo = request.files.get("libro")
         if archivo and archivo.filename.endswith(".pdf"):
             archivo.save(os.path.join(app.config["UPLOAD_FOLDER"], archivo.filename))
             return redirect(url_for("index"))
@@ -26,5 +26,6 @@ def subir():
 def descargar(nombre):
     return send_from_directory(app.config["UPLOAD_FOLDER"], nombre, as_attachment=True)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+# ❌ NO uses app.run() en Render
+# Render usa Gunicorn
+

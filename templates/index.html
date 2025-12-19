@@ -1,23 +1,23 @@
 {% extends "base.html" %}
+{% block content %}
 
-{% block contenido %}
-<a href="{{ url_for('subir') }}">➕ Subir libro</a>
-
-<div class="grid">
+{% for categoria, libros in biblioteca.items() %}
+<h3 class="mt-4">🏷️ {{ categoria }}</h3>
+<div class="row">
     {% for libro in libros %}
-    <div class="card">
-        <h3>{{ libro }}</h3>
-
-        <a class="btn-download" href="{{ url_for('descargar', nombre=libro) }}">
-            📥 Descargar
-        </a>
-
-        <a class="btn-delete" href="{{ url_for('eliminar', nombre=libro) }}"
-           onclick="return confirm('¿Eliminar este archivo?')">
-            🗑️ Eliminar
-        </a>
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h6 class="card-title text-truncate">{{ libro }}</h6>
+                <a href="/descargar/{{ categoria }}/{{ libro }}" class="btn btn-primary btn-sm">⬇️ Descargar</a>
+                <a href="/eliminar/{{ categoria }}/{{ libro }}" class="btn btn-danger btn-sm">🗑️</a>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
+{% endfor %}
+
 {% endblock %}
+
 

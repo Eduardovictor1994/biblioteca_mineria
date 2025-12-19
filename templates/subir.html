@@ -1,16 +1,25 @@
 {% extends "base.html" %}
+{% block content %}
 
-{% block contenido %}
-<h2>Subir libro PDF</h2>
+<h3>📤 Subir libro</h3>
 
 <form method="POST" enctype="multipart/form-data">
-    <input type="file" name="libro" accept=".pdf" required>
-    <br><br>
-    <button type="submit">Subir</button>
+    <div class="mb-3">
+        <input type="file" name="libro" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <select name="categoria" class="form-select" required>
+            {% for cat in categorias %}
+            <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button class="btn btn-success">Subir</button>
 </form>
 
-<br>
-<a href="{{ url_for('index') }}">⬅ Volver</a>
 {% endblock %}
+
 
 

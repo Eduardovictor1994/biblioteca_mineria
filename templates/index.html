@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Biblioteca Minera</title>
+</head>
+<body>
+    <h1>📚 Biblioteca de Minería</h1>
+
+    <a href="/subir">➕ Subir libro</a>
+
+    <ul>
+        {% for libro in libros %}
+        <li>
+            {{ libro }} —
+            <a href="/descargar/{{ libro }}">Descargar</a>
+        </li>
+        {% endfor %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    </ul>
+</body>
+</html>

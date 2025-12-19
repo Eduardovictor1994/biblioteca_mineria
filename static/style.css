@@ -1,0 +1,16 @@
+body {
+    font-family: Arial;
+    padding: 40px;
+    background: #f0f0f0;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+li {
+    background: white;
+    margin: 8px;
+    padding: 10px;
+    border-radius: 6px;
+}
